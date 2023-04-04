@@ -17,34 +17,35 @@
 ### Install other softwares - git, unzip and wget
 
 ``` sh
-sudo hostnamectl set-hostname ci
-sudo yum -y install unzip wget tree git
-sudo yum install java-11-openjdk -y
+sudo hostnamectl set-hostname ci;
+sudo yum -y install unzip wget tree git;
+sudo yum install java-11-amazon-corretto-devel.x86_64 -y ;
+sudo yum install java-1.8.0-amazon-corretto-devel.x86_64 -y;
 ```
 ###  Add Jenkins Repository and key
 ```sh
-sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-cd /etc/yum.repos.d/
-sudo curl -O https://pkg.jenkins.io/redhat-stable/jenkins.repo
+sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key;
+cd /etc/yum.repos.d/;
+sudo curl -O https://pkg.jenkins.io/redhat-stable/jenkins.repo;
 ```
 
 ## Install Jenkins
 ```sh
-sudo yum -y install jenkins  --nobest
+sudo yum -y install jenkins  --nobest;
 ```
 # start Jenkins  service and verify Jenkins is running
 ```sh
-sudo systemctl start jenkins
-sudo systemctl enable jenkins
-sudo systemctl status jenkins
+sudo systemctl start jenkins;
+sudo systemctl enable jenkins;
+sudo systemctl status jenkins;
 ```
 # Access Jenkins from the browser
 ```sh
-public-ip:8080
-curl ifconfig.co 
+public-ip:8080;
+curl ifconfig.co ;
 ```
 # get jenkins initial admin password
 ```sh
-sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword;
 ```
 
