@@ -1,0 +1,41 @@
+Linux
+You can configure the repository manager to run as a service with  init.d or  systemd . Both are startup frameworks used in Linux-based systems such as Ubuntu and CentOS. They are, essentially, initscripts that load commands to manage the repository manager daemon. Before running the service configure an absolute path for your repository manager files. Then create a nexus user with sufficient access rights to run the service. In  bin/nexus.rc  assign the user between the quotes in the line below:
+
+run_as_user="nexus"
+Symlink  $installdir/bin/nexus  to  /etc/init.d/nexus:
+
+sudo ln -s /opt/nexus-3.15.2-01/bin/nexus /etc/init.d/nexus
+Adjust the location (shown above as "/opt/nexus-3.15.2-01'") as needed for your installation location.
+
+chkconfig
+This example uses chkconfig, a tool that targets the initscripts in init.d to run the nexus service. Run these commands to activate the service:
+
+cd /etc/init.d
+sudo chkconfig --add nexus
+sudo chkconfig --levels 345 nexus on
+sudo service nexus start
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+This example is a script that uses systemd to run the repository manager service. Create a file called nexus.service. Add the following contents, then save the file in the  /etc/systemd/system/ directory:
+
+[Unit]
+Description=nexus service
+After=network.target
+  
+[Service]
+Type=forking
+LimitNOFILE=65536
+ExecStart=/etc/init.d/nexus start
+ExecStop=/etc/init.d/nexus stop 
+User=nexus
+Restart=on-abort
+TimeoutSec=600
+  
+[Install]
+WantedBy=multi-user.target
+Activate the service with the following commands:
+
+sudo systemctl daemon-reload
+sudo systemctl enable nexus.service
+sudo systemctl start nexus.service
