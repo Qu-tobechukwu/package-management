@@ -1,0 +1,65 @@
+Nginx - HTTP Server
+Install Nginx in Redhat
+
+dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest- 8.noarch.rpm
+
+sudo yum install nginx
+
+#Enable the nginx service
+sudo systemctl enable nginx
+
+#Start the nginx service
+sudo systemctl start nginx
+
+#Check the nginx service status
+sudo systemctl status nginx
+
+Rename default nginx cont file
+sudo mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bkp
+
+Create nginx cont file in default path and define proxy(reverse proxy) rules.
+sudo vi /etc/nginx/nginx.conf Add the below lines 
+
+events{
+worker_connections 1024;
+}
+http { keepalive_timeout 5;
+upstream tomcatServers {
+  keepalive 50;
+  server 172.31.16.79:8080;
+  server 172.31.28.14:8080;
+  server 172.31.84.245:8080;
+
+}
+server {
+   listen 80;
+location / {
+        proxy_set_header  X-Real-lP $remote_addr;
+        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header  X-Forwarded-Proto $scheme;
+        proxy_set_header        Host $host;
+        proxy_pass http://tomcatServers;
+}
+}
+}
+
+Node for upgrade/patching:
+  server 172.31.16.79:8080;
+  server 172.31.28.14:8080;
+  server 172.31.84.245:8080 down;
+
+Node should get more traffic:
+  server 172.31.16.79:8080 weight=4;
+  server 172.31.28.14:8080;
+  server 172.31.84.245:8080 down;
+
+
+Validate the nginx.conf by using below command
+sudo nginx -t
+
+Reload configurations
+sudo nginx -s reload
+
+Restart nginx Service to Reflect the proxy rules.
+
+sudo systemctl restart nginx
