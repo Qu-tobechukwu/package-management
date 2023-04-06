@@ -43,6 +43,7 @@ sudo rm -rf nexus-3.15.2-01-unix.tar.gz;
 ## Grant permissions for nexus user to start and manage nexus service
 ```sh
 # Change the owner and group permissions to /opt/nexus and /opt/sonatype-work directories.
+/opt/nexus/bin/nexus run
 sudo chown -R nexus:nexus /opt/nexus;
 sudo chown -R nexus:nexus /opt/sonatype-work;
 sudo chmod -R 775 /opt/nexus;
