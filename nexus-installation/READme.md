@@ -58,10 +58,10 @@ echo  'run_as_user="nexus" ' > /opt/nexus/bin/nexus.rc;
 ##  CONFIGURE NEXUS TO RUN AS A SERVICE 
 ```sh
 sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus;
-sudo ln -s /opt/nexus-3.15.2-01/bin/nexus /etc/init.d/nexus;
 cd /etc/init.d;
 sudo chkconfig --add nexus;
 sudo chkconfig --levels 345 nexus on;
+sudo service nexus start
 
 #9 Enable and start the nexus services
 sudo systemctl enable nexus;
